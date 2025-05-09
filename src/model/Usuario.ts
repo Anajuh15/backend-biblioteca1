@@ -236,4 +236,46 @@ export class Usuario {
         // Executa a query passando o nome do arquivo e o uuid do usuário como parâmetros
         await database.query(query, [nomeArquivo, uuid]);
     }
+    /**
+     * Retorna uma lista com todos os usuários cadastrados no banco de dados
+     * @returns Lista com todos os usuários cadastrados ou null em caso de erro
+     */
+    static async listarUsuario(): Promise<Array<Usuario> | null> {
+        // Criando lista vazia para armzenar os usuários
+        let listaDeUsuarios: Array<Usuario> = [];
+
+        try {
+            // Query para recuperar todos os usuários cadastrados
+            const querySelectUsuarios = `SELECT * FROM usuario`;
+
+            // Executa a query no banco de dados
+            const respostaBD = await database.query(querySelectUsuarios);
+
+            // Percorre os resultados da consulta
+            respostaBD.rows.forEach((usuario) => {
+                // Cria um novo objeto Usuario com os dados retornados
+                let novoUsuario = new Usuario(
+                    usuario.nome,
+                    usuario.username,
+                    usuario.email
+                );
+
+                // Atribui os valores adicionais ao objeto
+                novoUsuario.setIdUsuario(usuario.id_usuario);
+                novoUsuario.setUuidUsuario(usuario.uuid);
+                novoUsuario.setImagemPerfil(usuario.imagem_perfil);
+                // Adiciona o usuário à lista
+                listaDeUsuarios.push(novoUsuario);
+            });
+
+            // Retorna a lista de usuários
+            return listaDeUsuarios;
+        } catch (error) {
+            // Em caso de erro, exibe uma mensagem no console e retorna null
+            console.log(`Erro ao recuperar usuários. ${error}`);
+            return null;
+        }
+    }
+
+
 }

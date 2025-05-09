@@ -15,6 +15,7 @@ const SERVER_ROUTES = {
     REMOVER_EMPRESTIMO: '/remove/emprestimo',
 
     NOVO_USUARIO: '/novo/usuario',
+    LISTAR_USUARIO: '/lista/usuarios',
 }
 
 export { SERVER_ROUTES }
